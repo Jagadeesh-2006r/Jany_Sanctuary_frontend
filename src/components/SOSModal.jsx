@@ -6,7 +6,7 @@ export default function SOSModal({ isOpen, onClose }) {
   const [audioError, setAudioError] = useState(false);
   const audioRef = useRef(null);
 
-  const voiceSrc = 'http://localhost:5000/media/appa_voice.mp3';
+  const voiceSrc = '/media/appa_voice.mp3';
   const whatsappUrl = 'https://wa.me/?text=Appa%20I%20miss%20you,%20video%20call%20vaanga%20pa!';
 
   useEffect(() => {
@@ -170,7 +170,7 @@ export default function SOSModal({ isOpen, onClose }) {
               </p>
               <p className="text-xs text-slate-400">
                 {audioError
-                  ? 'File (appa_voice.mp3) awaiting upload in server'
+                  ? 'Voice note audio unavailable'
                   : isPlayingAudio
                   ? 'Listening to Appa speaking...'
                   : 'Tap to hear Appa’s voice'}

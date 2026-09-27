@@ -18,7 +18,7 @@ const MOODS = [
     emoji: '🥺',
     label: 'Feeling Sad / Crying',
     desc: 'Tears or a heavy heart today',
-    audio: 'http://localhost:5000/media/mood_sad.mp3',
+    audio: '/media/mood_sad.mp3',
     lyrics:
       'கண்ணீர் சிந்தாதேடி என் செல்லமே... உன் அப்பா உனக்காக எப்போதுமே ஒரு தூணாக நிற்பேன்.',
     color: 'from-blue-600/30 via-indigo-600/20 to-slate-900',
@@ -31,7 +31,7 @@ const MOODS = [
     emoji: '💔',
     label: 'Missing Appa Badly',
     desc: 'Longing for Appa’s hugs & voice',
-    audio: 'http://localhost:5000/media/mood_missing.mp3',
+    audio: '/media/mood_missing.mp3',
     lyrics:
       'ஒரு போன் கால் போதும்டா ஜானி... உலகத்தின் எந்த மூலையில் இருந்தாலும் உன் முன்னாடி வந்து நிற்பேன்.',
     color: 'from-rose-600/30 via-pink-600/20 to-slate-900',
@@ -44,7 +44,7 @@ const MOODS = [
     emoji: '😫',
     label: 'Stressed / Overwhelmed',
     desc: 'Too many thoughts or worries',
-    audio: 'http://localhost:5000/media/mood_stressed.mp3',
+    audio: '/media/mood_stressed.mp3',
     lyrics:
       'எதையும் நினைச்சு பயப்படாதேடி என் பட்டு குட்டி... உன் அப்பா இருக்கேன், எல்லாம் சரியாகிடும்.',
     color: 'from-amber-600/30 via-orange-600/20 to-slate-900',
@@ -57,7 +57,7 @@ const MOODS = [
     emoji: '😊',
     label: 'Happy & Smiling',
     desc: 'Joyful, bright, and cheerful',
-    audio: 'http://localhost:5000/media/mood_happy.mp3',
+    audio: '/media/mood_happy.mp3',
     lyrics:
       'உன் சிரிப்பு தான் என் உலகம்டா ஜானி! எப்போதுமே இதே சந்தோஷத்தோடு நீ வாழணும்.',
     color: 'from-emerald-600/30 via-teal-600/20 to-slate-900',

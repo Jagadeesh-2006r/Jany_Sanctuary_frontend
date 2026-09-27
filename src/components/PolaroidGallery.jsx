@@ -82,7 +82,7 @@ export default function PolaroidGallery() {
       {/* Grid of Realistic Polaroids */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-6 lg:gap-8">
         {MEMORIES.map((memory) => {
-          const localSrc = `http://localhost:5000/media/${memory.fileName}`;
+          const localSrc = `/media/${memory.fileName}`;
 
           return (
             <div
@@ -241,7 +241,7 @@ export default function PolaroidGallery() {
 
             <div className="w-full aspect-square rounded overflow-hidden bg-slate-950">
               <img
-                src={`http://localhost:5000/media/${activePhoto.fileName}`}
+                src={`/media/${activePhoto.fileName}`}
                 onError={(e) => handleImageError(e, activePhoto.fallbackImg)}
                 alt={activePhoto.caption}
                 className="w-full h-full object-cover"

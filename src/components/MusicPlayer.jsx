@@ -10,7 +10,7 @@ export default function MusicPlayer({ audioRef: externalAudioRef }) {
   const internalAudioRef = useRef(null);
   const audioRef = externalAudioRef || internalAudioRef;
 
-  const audioSrc = 'http://localhost:5000/media/song.mp3';
+  const audioSrc = '/media/song.mp3';
 
   const togglePlay = () => {
     const audio = audioRef.current;
@@ -124,7 +124,7 @@ export default function MusicPlayer({ audioRef: externalAudioRef }) {
             </span>
             {hasError && (
               <span
-                title="Audio file (song.mp3) not found in /server/public/media yet"
+                title="Audio file (song.mp3) not available"
                 className="inline-flex items-center text-[10px] text-amber-300/80 bg-amber-500/10 px-1.5 py-0.5 rounded"
               >
                 <AlertCircle className="w-2.5 h-2.5 mr-1" />
