@@ -195,7 +195,7 @@ export default function VideoCallCard() {
               </div>
             </div>
 
-            <h4 className="text-xl font-bold text-white mb-1">Incoming Video Call from Appa ❤️</h4>
+            <h4 className="text-xl font-bold text-white mb-1">Incoming Video Call from Appa </h4>
             <p className="text-xs text-rose-300 font-mono tracking-wider mb-6">
               Ring... Ring... Pa is waiting on the line
             </p>
@@ -253,12 +253,12 @@ export default function VideoCallCard() {
             {/* Video Call Simulation Screen */}
             <div className="relative rounded-2xl bg-gradient-to-br from-slate-900 via-rose-950/30 to-purple-950/40 p-6 sm:p-8 border border-white/5 text-center min-h-[220px] flex flex-col items-center justify-center">
               <p className="font-handwriting text-2xl sm:text-3xl text-rose-200 mb-3 max-w-lg leading-relaxed">
-                “En kannamma! Paaru, un appa un munnadi vandhutten. Nee eppo kuptalum un appa odi
-                varuven da chellam.”
+                “En Chella magalae! Paaru, un appa un munnadi vandhutten. Nee eppo kuptalum un appa odi
+                varuven da jany.”
               </p>
               <p className="text-slate-300 text-xs sm:text-sm max-w-md">
-                I can see your bright eyes and lovely smile. Never let any small worries dim that
-                light. Appa loves you more than words could ever convey.
+                I can see your bright eyes and cute smile. Never let any small worries dim that
+                light. appa thinks about you more than words could ever convey.
               </p>
             </div>
 

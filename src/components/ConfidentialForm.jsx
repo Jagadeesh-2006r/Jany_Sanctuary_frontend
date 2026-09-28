@@ -134,7 +134,7 @@ export default function ConfidentialForm({ currentMood: propMood = '' }) {
               <CheckCircle2 className="w-6 h-6 text-emerald-300" />
             </div>
             <h4 className="text-lg font-bold text-white font-serif mb-1">
-              Un message Appa kitta safe-a poi serndhuduchu da chellam! ❤️
+              Un message Appa kitta safe-a poi serndhuduchu da ma! 
             </h4>
             <p className="text-xs sm:text-sm text-slate-300">
               Appa has received every single word you wrote. Thank you for opening your heart to me.
@@ -252,7 +252,7 @@ export default function ConfidentialForm({ currentMood: propMood = '' }) {
               htmlFor="messageToAppa"
               className="block text-sm font-semibold text-slate-200 mb-2"
             >
-              3. Un appa-kitta neega eppovum sollama vechurundha, illa ippo solla virumbura oru
+              3. Un appa-kitta nee eppovum sollama vechurundha, illa ippo solla virumbura oru
               vishayam?{' '}
               <span className="text-slate-400 font-normal text-xs">
                 (Anything unsaid you wish to tell Appa?)
@@ -286,7 +286,7 @@ export default function ConfidentialForm({ currentMood: propMood = '' }) {
               ) : (
                 <>
                   <Send className="w-5 h-5" />
-                  <span>Send Directly to Appa's Vault ❤️</span>
+                  <span>Send Directly to Appa's Vault </span>
                 </>
               )}
             </button>

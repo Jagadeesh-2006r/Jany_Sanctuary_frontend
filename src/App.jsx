@@ -93,7 +93,7 @@ export default function App() {
         // Safe fallback
       }
     } else {
-      setErrorMessage('Incorrect password da chellam, try again!');
+      setErrorMessage('Incorrect password da jany, try again!');
     }
   };
 

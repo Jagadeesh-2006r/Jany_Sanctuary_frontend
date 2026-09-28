@@ -22,7 +22,7 @@ const MOODS = [
     desc: 'Tears or a heavy heart today',
     audio: '/media/mood_sad.mp3',
     lyrics:
-      'கண்ணீர் சிந்தாதேடி என் செல்லமே... உன் அப்பா உனக்காக எப்போதுமே ஒரு தூணாக நிற்பேன்.',
+      'கண்ணீர் சிந்தாதடா என் மகளே... உன் அப்பா உனக்காக எப்போதுமே ஒரு தூணாக நிற்பேண்டா.',
     color: 'from-blue-600/30 via-indigo-600/20 to-slate-900',
     border: 'border-blue-400/40',
     activeGlow: 'ring-2 ring-blue-400 shadow-lg shadow-blue-500/30 border-blue-300',
@@ -35,7 +35,7 @@ const MOODS = [
     desc: 'Longing for Appa’s hugs & voice',
     audio: '/media/mood_missing.mp3',
     lyrics:
-      'ஒரு போன் கால் போதும்டா ஜானி... உலகத்தின் எந்த மூலையில் இருந்தாலும் உன் முன்னாடி வந்து நிற்பேன்.',
+      'ஒரு போன் கால் போதும்டா ஜனி... உலகத்தின் எந்த மூலையில் இருந்தாலும் உன் முன்னாடி வந்து நிற்பேண்டா.',
     color: 'from-rose-600/30 via-pink-600/20 to-slate-900',
     border: 'border-rose-400/40',
     activeGlow: 'ring-2 ring-rose-400 shadow-lg shadow-rose-500/30 border-rose-300',
@@ -48,7 +48,7 @@ const MOODS = [
     desc: 'Too many thoughts or worries',
     audio: '/media/mood_stressed.mp3',
     lyrics:
-      'எதையும் நினைச்சு பயப்படாதேடி என் பட்டு குட்டி... உன் அப்பா இருக்கேன், எல்லாம் சரியாகிடும்.',
+      'எதையும் நினைச்சு பயப்படாதடா... உன் அப்பா இருக்கேண்டா, எல்லாம் சரியாகிடும்.',
     color: 'from-amber-600/30 via-orange-600/20 to-slate-900',
     border: 'border-amber-400/40',
     activeGlow: 'ring-2 ring-amber-400 shadow-lg shadow-amber-500/30 border-amber-300',
@@ -61,7 +61,7 @@ const MOODS = [
     desc: 'Joyful, bright, and cheerful',
     audio: '/media/mood_happy.mp3',
     lyrics:
-      'உன் சிரிப்பு தான் என் உலகம்டா ஜானி! எப்போதுமே இதே சந்தோஷத்தோடு நீ வாழணும்.',
+      'உன் சிரிப்பு தான் என் உலகம்டா ஜனி! எப்போதுமே இதே சந்தோஷத்தோடு நீ வாழணும்.',
     color: 'from-emerald-600/30 via-teal-600/20 to-slate-900',
     border: 'border-emerald-400/40',
     activeGlow: 'ring-2 ring-emerald-400 shadow-lg shadow-emerald-500/30 border-emerald-300',
@@ -152,12 +152,12 @@ export default function MoodTracker() {
 
   const fallbackReassurance = (moodKey) => {
     const fallbacks = {
-      sad: 'Kavala padadha da Jany, un appa un koodave dhaan irukken. Everything will be alright da chellam.',
-      missing_appa: 'Un appa unna oru nodi kooda marakala da. Oru missed call kudu, un munnadi nippan.',
+      sad: 'Kavala padadha da Jany, un appa un koodave dhaan da irukken. Everything will be alright da.',
+      missing_appa: 'Un appa unna oru nodi kooda marakala da. Oru missed call kudu, un munnadi vandhu nippenda.',
       stressed: 'Take a deep breath da kannamma. En princess romba strong, unnala mudiyum.',
       happy: 'Un sirippu dhaan en ulagam da Jany! Eppovum ipdiye sandhosham-a iru da.',
     };
-    setComfortMessage(fallbacks[moodKey] || 'Appa eppovum un koodave irukken da chellam!');
+    setComfortMessage(fallbacks[moodKey] || 'Appa eppovum un koodave irukken dhan da irukken iruppenum kooda...!');
   };
 
   const toggleAudioPlay = () => {
@@ -314,7 +314,7 @@ export default function MoodTracker() {
                 <div>
                   <span className="text-[10px] uppercase font-bold tracking-widest text-rose-400 flex items-center gap-1">
                     <Sparkles className="w-3 h-3 text-amber-300" />
-                    Appa's Dedicated Mood Audio & Words
+                    Appa's Dedicated Audio & Words
                   </span>
                   <h4 className="text-xs font-semibold text-slate-200">
                     {activeMoodObj.label}

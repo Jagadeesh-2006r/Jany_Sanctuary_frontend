@@ -28,8 +28,8 @@ const MEMORIES = [
   {
     id: 2,
     fileName: 'photo2.jpg',
-    caption: 'En Viral Piditha Naal 👣',
-    subCaption: 'Ovvoru adiyum un kooda',
+    caption: 'Namma Siricha Nerangal 👣',
+    subCaption: 'Marakka mudiyadha kathaigal',
     tilt: 'rotate-2',
     fallbackImg:
       'https://images.unsplash.com/photo-1476703993599-0035a21b17a9?auto=format&fit=crop&w=800&q=80',
@@ -37,8 +37,8 @@ const MEMORIES = [
   {
     id: 3,
     fileName: 'photo3.jpg',
-    caption: 'Namma Siricha Nerangal ✨',
-    subCaption: 'Marakka mudiyadha kathaigal',
+    caption: 'Nee asapattu vanguna porul ✨',
+    subCaption: 'Unaku Romba Pudicha Onnu',
     tilt: '-rotate-1',
     fallbackImg:
       'https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?auto=format&fit=crop&w=800&q=80',
@@ -47,7 +47,7 @@ const MEMORIES = [
     id: 4,
     fileName: 'photo4.jpg',
     caption: 'Forever My Princess 👑',
-    subCaption: 'Eppovum nee en chellam',
+    subCaption: 'Eppovum nee en kolandha dhan',
     tilt: 'rotate-3',
     fallbackImg:
       'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=800&q=80',
@@ -75,7 +75,7 @@ export default function PolaroidGallery() {
           Unforgettable Jany Memories
         </h2>
         <p className="text-slate-400 text-xs sm:text-sm">
-          Snapshots of pure love, innocence, and shared laughter that time can never erase.
+          Snapshots of pure emotions, innocence, and shared laughter that time can never erase.
         </p>
       </div>
 
@@ -144,17 +144,17 @@ export default function PolaroidGallery() {
 
               {/* Title */}
               <h3 className="font-cursive text-3xl sm:text-5xl text-transparent bg-clip-text bg-gradient-to-r from-rose-200 via-pink-100 to-amber-200 text-glow leading-tight mb-2">
-                Indha 4 Polaroids Mattum Illa Chellam...
+                Indha 4 Polaroids Mattum Illa da...
               </h3>
 
               {/* Emotional Handwriting Quote */}
               <p className="font-handwriting text-2xl sm:text-3xl text-rose-300/90 mb-4">
-                “Un mudhal siripu mudhal inru varai... Namma ninaivugalin muzhu ulagam.”
+                “Un mudhal siripu la irundhu inru varai... Namma ninaivugalin muzhu ulagam.”
               </p>
 
               {/* Emotional Description */}
               <p className="text-slate-300 text-xs sm:text-sm md:text-base leading-relaxed max-w-2xl mb-6">
-                These four snapshots are just tiny drops in an entire ocean of love. Appa has safely
+                These four snapshots are just tiny drops in an entire ocean of memories. Appa has safely
                 archived all our original high-definition photos, heartwarming childhood video clips,
                 school celebrations, and unscripted laughs in our private Google Drive vault.
                 Whenever you feel down, miss home, or want to revisit our beautiful journey together,
@@ -211,7 +211,7 @@ export default function PolaroidGallery() {
                 {/* Secure footnote */}
                 <div className="flex items-center gap-1.5 text-[11px] text-slate-400 mt-3.5">
                   <Lock className="w-3 h-3 text-rose-400" />
-                  <span>Always open for you, da chellam</span>
+                  <span>Always open for you, da jany</span>
                 </div>
               </div>
             </div>

@@ -47,9 +47,9 @@ export default function Hero({ onOpenSOS }) {
 
       {/* Hero Primary Punchline */}
       <h1 className="text-3xl sm:text-5xl md:text-6xl font-extrabold text-white tracking-tight leading-tight max-w-4xl mb-6">
-        En Uyirum Nee,{' '}
+        En anbum nee,{' '}
         <span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 via-pink-300 to-amber-200">
-          En Ulagamum Nee Dhaan Da...
+          En santhoshamum Nee Dhaan Da...
         </span>
       </h1>
 
@@ -87,7 +87,7 @@ export default function Hero({ onOpenSOS }) {
         </span>
         <span className="inline-flex items-center gap-1.5">
           <Flame className="w-4 h-4 text-rose-400" />
-          Unconditional Love
+          Unconditional Emotions
         </span>
         <span className="inline-flex items-center gap-1.5">
           <Heart className="w-4 h-4 text-pink-400 fill-pink-400/40" />

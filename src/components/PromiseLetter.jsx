@@ -21,7 +21,7 @@ export default function PromiseLetter() {
 
             <span className="text-[11px] sm:text-xs uppercase tracking-widest font-semibold text-amber-300/90 flex items-center gap-1.5 mb-1">
               <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-              TO MY BABY JANY — FROM THE BOTTOM OF MY HEART
+              TO MY JANGANYA — FROM THE BOTTOM OF MY HEART
             </span>
 
             <h2 className="font-cursive text-4xl sm:text-6xl text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-rose-200 to-pink-200 text-glow-gold py-2">
@@ -38,18 +38,17 @@ export default function PromiseLetter() {
             <p>
               I know recently silavishayangal namma edhirpaatha madhiri pogala. Sila nerangal la
               vaarthaigal thavaraa vandhrukalaam, misunderstandings vandhurukalaam, sandaigal
-              nadandhirukalaam. Aana indha ulagathula endha oru sandaalayum, endha oru manakasadhaalayum
+              nadandhirukalaam. Aana indha ulagathula endha oru sandailaiyum, endha oru manakastathulaiyum
               un appa un mela vechirukka anba konjam kooda koraikka mudiyadhu da.
             </p>
 
             <p className="p-4 sm:p-5 rounded-2xl bg-white/[0.03] border-l-4 border-amber-400/70 italic text-amber-100/90">
-              “Unna appanu koopdama oru naal kooda irukka mudiyaadha un anbu enakku theriyum da...
-              Enakku nee dhaan uyiruu.”
+              “Munnadilam appanu koopdama oru naal kooda irukka mudiyaadha un anbu enakku theriyum da...
+              Enakku nee Romba Pudikum da .Nee Enga irundhalum en ponnu dhan da”
             </p>
 
             <p>
-              Enakku un manasunimmadhi dhaan da ellaathayum vida mukkiyam. Unakku space thevai na,
-              un manasu amaidhiyaaga irukka vazhi thevai na —{' '}
+              Enakku un manasu nimmadhi dhaan da ellaathayum vida mukkiyam. —{' '}
               <strong className="text-white font-semibold">
                 nee un viruppapadi nimmadhiya iru da. Ini naan unna endha vidhathulayum disturb panna
                 maaten, disturb aavum irukka maaten.
@@ -65,10 +64,10 @@ export default function PromiseLetter() {
               </div>
 
               <p className="font-handwriting text-2xl sm:text-3xl text-rose-100 leading-snug">
-                “Aana unakku edhaachum kashtam vandhaa, 'Enga appa irundha nalla irundhirukkum' nu
-                thonuna podhum... Oru text, oru missed call kudu da. Enga irundhaalum yosikama takkunu
+                “Aana unakku edhaachum kashtam vandhaa, 'Enga appa irundha nalla irundhu irukkum' nu
+                thonuchina... Oru text, oru missed call kudu da. Enga irundhaalum yosikama takkunu
                 unakku video call panni en kolandhaiya naan samadhanam paduthuven da... Idhu promise
-                da Jany, en chellamae!”
+                da Jany, en magalae!”
               </p>
             </div>
 

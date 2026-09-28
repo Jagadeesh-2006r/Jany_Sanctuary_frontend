@@ -134,7 +134,7 @@ export default function MusicPlayer({ audioRef: externalAudioRef }) {
           </div>
 
           <h4 className="text-xs sm:text-sm font-semibold text-slate-100 truncate mt-0.5">
-            En Ulagamum Nee Dhaan
+            En santhoshamum Nee Dhaan
           </h4>
           <p className="text-[11px] text-slate-400 truncate">Dedicated to Jany</p>
 
