@@ -12,6 +12,8 @@ import {
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
+const API_BASE = "https://jany-sanctuary-backend.onrender.com";
+
 const MOODS = [
   {
     key: 'sad',
@@ -125,7 +127,7 @@ export default function MoodTracker() {
 
     // Preserve existing POST API logging to /api/log-mood
     try {
-      const response = await fetch('http://localhost:5000/api/log-mood', {
+      const response = await fetch(`${API_BASE}/api/log-mood`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

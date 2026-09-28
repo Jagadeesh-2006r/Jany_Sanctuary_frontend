@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Lock, Send, Heart, Sparkles, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
+const API_BASE = "https://jany-sanctuary-backend.onrender.com";
+
 export default function ConfidentialForm() {
   const [formData, setFormData] = useState({
     q1_feeling: '',
@@ -30,20 +32,26 @@ export default function ConfidentialForm() {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch('http://localhost:5000/api/save-response', {
+      const payload = {
+        daughterName: 'Jaganya J (Jany)',
+        q1_feeling: formData.q1_feeling,
+        q2_miss_memory: formData.q2_miss_memory,
+        q3_message_to_appa: formData.q3_message_to_appa,
+      };
+
+      console.log('Posting confidential message to:', `${API_BASE}/api/messages`, payload);
+
+      const response = await fetch(`${API_BASE}/api/messages`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          daughterName: 'Jaganya J (Jany)',
-          q1_feeling: formData.q1_feeling,
-          q2_miss_memory: formData.q2_miss_memory,
-          q3_message_to_appa: formData.q3_message_to_appa,
-        }),
+        body: JSON.stringify(payload),
       });
 
       const result = await response.json();
 
       if (response.ok && result.success) {
+        console.log('✅ Server accepted message successfully:', result);
+        alert('Un message Appa kitta safe-a poi serndhuduchu da chellam! ❤️');
         setIsSuccess(true);
         setFormData({
           q1_feeling: '',
@@ -59,17 +67,15 @@ export default function ConfidentialForm() {
           colors: ['#f43f5e', '#ec4899', '#f59e0b', '#10b981'],
         });
       } else {
-        setErrorMessage(result.message || 'Failed to send your message. Please try again.');
+        const errorMsg = result.message || 'Failed to send your message. Please try again.';
+        console.error('❌ Server error response:', response.status, result);
+        alert(`Server error (${response.status}): ${errorMsg}`);
+        setErrorMessage(errorMsg);
       }
     } catch (err) {
-      console.warn('Network error while saving response:', err);
-      // Even if network fails, provide graceful offline acknowledgement
-      setIsSuccess(true);
-      setFormData({
-        q1_feeling: '',
-        q2_miss_memory: '',
-        q3_message_to_appa: '',
-      });
+      console.error('❌ Network error submitting to server:', err);
+      alert(`Network error connecting to server: ${err.message}`);
+      setErrorMessage(`Network error: ${err.message}`);
     } finally {
       setIsSubmitting(false);
     }

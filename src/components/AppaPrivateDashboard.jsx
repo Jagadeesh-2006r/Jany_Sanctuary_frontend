@@ -27,6 +27,7 @@ import {
 import confetti from 'canvas-confetti';
 
 const DEFAULT_PINS = ['appa123', 'janyappa', 'jaganya2007'];
+const API_BASE = "https://jany-sanctuary-backend.onrender.com";
 
 export default function AppaPrivateDashboard() {
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
@@ -83,14 +84,22 @@ export default function AppaPrivateDashboard() {
   const fetchDashboardData = async () => {
     setIsLoading(true);
     try {
-      const [messagesRes, moodsRes, sosRes] = await Promise.all([
-        fetch('http://localhost:5000/api/messages').then((r) => r.json()),
-        fetch('http://localhost:5000/api/moods').then((r) => r.json()),
-        fetch('http://localhost:5000/api/sos-alerts').then((r) => r.json()),
+      const messagesRes = await fetch(`${API_BASE}/api/messages`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+      }).then((r) => r.json());
+
+      console.log('Fetched messages data array from server:', messagesRes.data || messagesRes);
+
+      const [moodsRes, sosRes] = await Promise.all([
+        fetch(`${API_BASE}/api/moods`).then((r) => r.json()).catch(() => ({ success: false, data: [] })),
+        fetch(`${API_BASE}/api/sos-alerts`).then((r) => r.json()).catch(() => ({ success: false, data: [] })),
       ]);
 
       if (messagesRes && messagesRes.success) {
         setMessages(messagesRes.data || []);
+      } else if (Array.isArray(messagesRes)) {
+        setMessages(messagesRes);
       }
       if (moodsRes && moodsRes.success) {
         setMoods(moodsRes.data || []);
@@ -116,7 +125,7 @@ export default function AppaPrivateDashboard() {
   const handleToggleReadStatus = async (id, currentStatus) => {
     setUpdatingMessageId(id);
     try {
-      const res = await fetch(`http://localhost:5000/api/messages/${id}/read`, {
+      const res = await fetch(`${API_BASE}/api/messages/${id}/read`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ isRead: !currentStatus }),

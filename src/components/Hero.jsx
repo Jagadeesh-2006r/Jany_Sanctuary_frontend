@@ -1,10 +1,12 @@
 import React from 'react';
 import { Heart, Sparkles, PhoneCall, ShieldCheck, Flame } from 'lucide-react';
 
+const API_BASE = "https://jany-sanctuary-backend.onrender.com";
+
 export default function Hero({ onOpenSOS }) {
   const handleSOSClick = () => {
     // Log SOS trigger to backend for Appa's Private Monitoring Desk
-    fetch('http://localhost:5000/api/sos-alerts', {
+    fetch(`${API_BASE}/api/sos-alerts`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
