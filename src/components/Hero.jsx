@@ -47,7 +47,7 @@ export default function Hero({ onOpenSOS }) {
 
       {/* Hero Primary Punchline */}
       <h1 className="text-3xl sm:text-5xl md:text-6xl font-extrabold text-white tracking-tight leading-tight max-w-4xl mb-6">
-        En anbum nee,{' '}
+        En anbum,{' '}
         <span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 via-pink-300 to-amber-200">
           En santhoshamum Nee Dhaan Da...
         </span>
