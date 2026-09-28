@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
-const API_BASE = "https://jany-sanctuary-backend.onrender.com";
+const SHEETDB_MOODS_URL = "https://sheetdb.io/api/v1/9re3gyz5uidx1?sheet=moods";
 
 const MOODS = [
   {
@@ -125,29 +125,29 @@ export default function MoodTracker() {
       }
     }
 
-    // Preserve existing POST API logging to /api/log-mood
-    try {
-      const response = await fetch(`${API_BASE}/api/log-mood`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          mood: moodKey,
-          note: noteText,
-        }),
-      });
+    // Silently log mood check-in to Google Sheets via SheetDB in the background
+    const selectedMood = moodObj ? moodObj.label : moodKey;
+    fetch(SHEETDB_MOODS_URL, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        data: [
+          {
+            timestamp: new Date().toLocaleString(),
+            mood: selectedMood,
+            comfortNote: "Listened to comfort note / song",
+          },
+        ],
+      }),
+    }).catch((err) => {
+      console.log('Silent SheetDB mood log notice:', err.message);
+    });
 
-      const data = await response.json();
-      if (data.success && data.comfortingMessage) {
-        setComfortMessage(data.comfortingMessage);
-      } else {
-        fallbackReassurance(moodKey);
-      }
-    } catch (err) {
-      console.warn('Logging to server failed, using local comforting message:', err);
-      fallbackReassurance(moodKey);
-    } finally {
-      setIsLoading(false);
-    }
+    fallbackReassurance(moodKey);
+    setIsLoading(false);
   };
 
   const fallbackReassurance = (moodKey) => {

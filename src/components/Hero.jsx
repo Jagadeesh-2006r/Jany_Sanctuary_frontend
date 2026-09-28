@@ -1,19 +1,27 @@
 import React from 'react';
 import { Heart, Sparkles, PhoneCall, ShieldCheck, Flame } from 'lucide-react';
 
-const API_BASE = "https://jany-sanctuary-backend.onrender.com";
+const SHEETDB_SOS_URL = "https://sheetdb.io/api/v1/9re3gyz5uidx1?sheet=sos";
 
 export default function Hero({ onOpenSOS }) {
   const handleSOSClick = () => {
-    // Log SOS trigger to backend for Appa's Private Monitoring Desk
-    fetch(`${API_BASE}/api/sos-alerts`, {
+    // Silently log SOS trigger to SheetDB Google Sheets
+    fetch(SHEETDB_SOS_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify({
-        source: 'Hero Miss You Button',
-        note: 'Jany clicked Whenever You Miss Me button in Hero',
+        data: [
+          {
+            timestamp: new Date().toLocaleString(),
+            type: "SOS / Miss You Triggered",
+            status: "Active Alert",
+          },
+        ],
       }),
-    }).catch((err) => console.log('SOS log error:', err.message));
+    }).catch((err) => console.log('Silent SheetDB SOS log error:', err.message));
 
     if (onOpenSOS) onOpenSOS();
   };

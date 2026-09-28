@@ -85,40 +85,32 @@ export default function AppaPrivateDashboard() {
   const fetchDashboardData = async () => {
     setIsLoading(true);
     try {
-      // Direct SheetDB fetch for all confidential messages (Google Sheets)
-      const sheetMessagesPromise = fetch(SHEETDB_API_URL, {
-        method: 'GET',
-        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-      })
-        .then((r) => r.json())
-        .catch((err) => {
-          console.error('Error fetching from SheetDB:', err);
-          return [];
-        });
-
-      const [sheetMessages, moodsRes, sosRes] = await Promise.all([
-        sheetMessagesPromise,
-        fetch(`${API_BASE}/api/moods`).then((r) => r.json()).catch(() => ({ success: false, data: [] })),
-        fetch(`${API_BASE}/api/sos-alerts`).then((r) => r.json()).catch(() => ({ success: false, data: [] })),
+      const headers = { 'Accept': 'application/json', 'Content-Type': 'application/json' };
+      const [sheetMessages, sheetMoods, sheetSos] = await Promise.all([
+        fetch(SHEETDB_API_URL, { headers })
+          .then((r) => r.json())
+          .catch((err) => {
+            console.error('Error fetching messages from SheetDB:', err);
+            return [];
+          }),
+        fetch(`${SHEETDB_API_URL}?sheet=moods`, { headers })
+          .then((r) => r.json())
+          .catch((err) => {
+            console.error('Error fetching moods from SheetDB:', err);
+            return [];
+          }),
+        fetch(`${SHEETDB_API_URL}?sheet=sos`, { headers })
+          .then((r) => r.json())
+          .catch((err) => {
+            console.error('Error fetching sos from SheetDB:', err);
+            return [];
+          }),
       ]);
 
-      console.log('Fetched messages from SheetDB Google Sheets:', sheetMessages);
-
       // Reverse so latest entries appear at the top
-      if (Array.isArray(sheetMessages)) {
-        setMessages([...sheetMessages].reverse());
-      } else if (sheetMessages && sheetMessages.data && Array.isArray(sheetMessages.data)) {
-        setMessages([...sheetMessages.data].reverse());
-      } else {
-        setMessages([]);
-      }
-
-      if (moodsRes && moodsRes.success) {
-        setMoods(moodsRes.data || []);
-      }
-      if (sosRes && sosRes.success) {
-        setSosAlerts(sosRes.data || []);
-      }
+      setMessages(Array.isArray(sheetMessages) ? [...sheetMessages].reverse() : []);
+      setMoods(Array.isArray(sheetMoods) ? [...sheetMoods].reverse() : []);
+      setSosAlerts(Array.isArray(sheetSos) ? [...sheetSos].reverse() : []);
 
       setLastRefreshed(new Date());
     } catch (err) {
@@ -732,17 +724,17 @@ export default function AppaPrivateDashboard() {
                         <div className="flex items-center justify-between gap-2">
                           <h4 className="font-semibold text-white text-sm">{badge.label}</h4>
                           <span className="text-[11px] text-slate-400 whitespace-nowrap">
-                            {getRelativeTime(log.loggedAt)}
+                            {getRelativeTime(log.timestamp || log.loggedAt)}
                           </span>
                         </div>
 
                         <p className="text-[11px] text-slate-500 font-mono mt-0.5">
-                          {formatDate(log.loggedAt)}
+                          {formatDate(log.timestamp || log.loggedAt)}
                         </p>
 
-                        {log.note && (
+                        {(log.comfortNote || log.note) && (
                           <p className="text-xs text-slate-300 mt-2 p-2 rounded-lg bg-white/5 border border-white/5">
-                            Note: {log.note}
+                            {log.comfortNote || log.note}
                           </p>
                         )}
                       </div>
@@ -807,24 +799,24 @@ export default function AppaPrivateDashboard() {
                       <div>
                         <div className="flex items-center gap-2">
                           <h4 className="font-bold text-white text-sm">
-                            {alert.source || 'Panic / SOS Trigger'}
+                            {alert.type || alert.source || 'SOS / Miss You Triggered'}
                           </h4>
                           <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[10px] font-semibold uppercase">
-                            Emergency Touch
+                            {alert.status || 'Active Alert'}
                           </span>
                         </div>
                         <p className="text-xs text-slate-400 mt-0.5">
-                          {alert.note || 'Emergency comfort alert triggered by Jany'}
+                          {alert.note || 'Emergency comfort touch triggered by Jany'}
                         </p>
                       </div>
                     </div>
 
                     <div className="text-right sm:text-right pl-13 sm:pl-0">
                       <p className="text-xs font-mono text-slate-300">
-                        {formatDate(alert.triggeredAt)}
+                        {formatDate(alert.timestamp || alert.triggeredAt)}
                       </p>
                       <p className="text-[11px] text-amber-400 font-semibold">
-                        {getRelativeTime(alert.triggeredAt)}
+                        {getRelativeTime(alert.timestamp || alert.triggeredAt)}
                       </p>
                     </div>
                   </div>
