@@ -28,6 +28,7 @@ import confetti from 'canvas-confetti';
 
 const DEFAULT_PINS = ['appa123', 'janyappa', 'jaganya2007'];
 const API_BASE = "https://jany-sanctuary-backend.onrender.com";
+const SHEETDB_API_URL = "https://sheetdb.io/api/v1/9re3gyz5uidx1";
 
 export default function AppaPrivateDashboard() {
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
@@ -84,23 +85,34 @@ export default function AppaPrivateDashboard() {
   const fetchDashboardData = async () => {
     setIsLoading(true);
     try {
-      const messagesRes = await fetch(`${API_BASE}/api/messages`, {
+      // Direct SheetDB fetch for all confidential messages (Google Sheets)
+      const sheetMessagesPromise = fetch(SHEETDB_API_URL, {
         method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-      }).then((r) => r.json());
+        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+      })
+        .then((r) => r.json())
+        .catch((err) => {
+          console.error('Error fetching from SheetDB:', err);
+          return [];
+        });
 
-      console.log('Fetched messages data array from server:', messagesRes.data || messagesRes);
-
-      const [moodsRes, sosRes] = await Promise.all([
+      const [sheetMessages, moodsRes, sosRes] = await Promise.all([
+        sheetMessagesPromise,
         fetch(`${API_BASE}/api/moods`).then((r) => r.json()).catch(() => ({ success: false, data: [] })),
         fetch(`${API_BASE}/api/sos-alerts`).then((r) => r.json()).catch(() => ({ success: false, data: [] })),
       ]);
 
-      if (messagesRes && messagesRes.success) {
-        setMessages(messagesRes.data || []);
-      } else if (Array.isArray(messagesRes)) {
-        setMessages(messagesRes);
+      console.log('Fetched messages from SheetDB Google Sheets:', sheetMessages);
+
+      // Reverse so latest entries appear at the top
+      if (Array.isArray(sheetMessages)) {
+        setMessages([...sheetMessages].reverse());
+      } else if (sheetMessages && sheetMessages.data && Array.isArray(sheetMessages.data)) {
+        setMessages([...sheetMessages.data].reverse());
+      } else {
+        setMessages([]);
       }
+
       if (moodsRes && moodsRes.success) {
         setMoods(moodsRes.data || []);
       }
@@ -122,34 +134,29 @@ export default function AppaPrivateDashboard() {
     }
   }, [isAuthenticated]);
 
-  const handleToggleReadStatus = async (id, currentStatus) => {
+  const handleToggleReadStatus = (id, currentStatus) => {
     setUpdatingMessageId(id);
     try {
-      const res = await fetch(`${API_BASE}/api/messages/${id}/read`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ isRead: !currentStatus }),
-      });
-      const data = await res.json();
+      const newStatus = !currentStatus;
+      setMessages((prev) =>
+        prev.map((msg, idx) => {
+          const key = msg._id || idx;
+          return key === id
+            ? { ...msg, isRead: newStatus, readAt: newStatus ? new Date().toISOString() : null }
+            : msg;
+        })
+      );
 
-      if (data.success && data.data) {
-        setMessages((prev) =>
-          prev.map((msg) => (msg._id === id ? { ...msg, isRead: data.data.isRead, readAt: data.data.readAt } : msg))
-        );
-
-        if (!currentStatus) {
-          try {
-            confetti({
-              particleCount: 25,
-              spread: 50,
-              origin: { y: 0.5 },
-              colors: ['#f43f5e', '#fb7185', '#fda4af'],
-            });
-          } catch (e) {}
-        }
+      if (newStatus) {
+        try {
+          confetti({
+            particleCount: 25,
+            spread: 50,
+            origin: { y: 0.5 },
+            colors: ['#f43f5e', '#fb7185', '#fda4af'],
+          });
+        } catch (e) {}
       }
-    } catch (err) {
-      console.error('Error toggling read status:', err);
     } finally {
       setUpdatingMessageId(null);
     }
@@ -566,10 +573,15 @@ export default function AppaPrivateDashboard() {
                         #{filteredMessages.length - index}
                       </div>
                       <div>
-                        <div className="flex items-center gap-2">
+                        <div className="flex flex-wrap items-center gap-2">
                           <h4 className="font-bold text-white text-base">
                             {msg.daughterName || 'Jaganya J (Jany)'}
                           </h4>
+                          {msg.mood && (
+                            <span className="px-2.5 py-0.5 rounded-full bg-rose-500/15 border border-rose-400/30 text-rose-300 text-[11px] font-medium">
+                              {msg.mood}
+                            </span>
+                          )}
                           {msg.isRead ? (
                             <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-400/30 text-emerald-300 text-[11px] font-medium flex items-center gap-1">
                               <CheckCircle2 className="w-3 h-3" />
@@ -583,9 +595,9 @@ export default function AppaPrivateDashboard() {
                           )}
                         </div>
                         <p className="text-[11px] text-slate-400 flex items-center gap-2 mt-0.5">
-                          <span>{formatDate(msg.submittedAt)}</span>
+                          <span>{formatDate(msg.timestamp || msg.submittedAt)}</span>
                           <span>&bull;</span>
-                          <span className="text-rose-300">{getRelativeTime(msg.submittedAt)}</span>
+                          <span className="text-rose-300">{getRelativeTime(msg.timestamp || msg.submittedAt)}</span>
                           {msg.readAt && (
                             <>
                               <span>&bull;</span>
@@ -628,7 +640,7 @@ export default function AppaPrivateDashboard() {
                         <span>How she is feeling right now (Ippo un manasu eppadi da irukku?):</span>
                       </span>
                       <p className="text-slate-200 text-sm sm:text-base leading-relaxed whitespace-pre-wrap font-sans">
-                        {msg.q1_feeling}
+                        {msg.feeling || msg.q1_feeling}
                       </p>
                     </div>
 
@@ -641,7 +653,7 @@ export default function AppaPrivateDashboard() {
                         <span>Memory she misses the most (Namma memories-la eppovum nyabagam varadhu):</span>
                       </span>
                       <p className="text-slate-200 text-sm sm:text-base leading-relaxed whitespace-pre-wrap font-sans">
-                        {msg.q2_miss_memory}
+                        {msg.memory || msg.q2_miss_memory}
                       </p>
                     </div>
 
@@ -654,7 +666,7 @@ export default function AppaPrivateDashboard() {
                         <span>Unsaid message to Appa (Un appa-kitta solla virumbura vishayam):</span>
                       </span>
                       <p className="font-handwriting text-2xl sm:text-3xl text-rose-200 leading-snug whitespace-pre-wrap">
-                        "{msg.q3_message_to_appa}"
+                        "{msg.messageToAppa || msg.q3_message_to_appa}"
                       </p>
                     </div>
                   </div>

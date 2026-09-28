@@ -1,16 +1,25 @@
 import React, { useState } from 'react';
-import { Lock, Send, Heart, Sparkles, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
+import { Lock, Send, Heart, Sparkles, CheckCircle2, AlertCircle, Loader2, Smile } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
-const API_BASE = "https://jany-sanctuary-backend.onrender.com";
+const SHEETDB_API_URL = "https://sheetdb.io/api/v1/9re3gyz5uidx1";
 
-export default function ConfidentialForm() {
+const QUICK_MOODS = [
+  { id: 'happy', label: 'Happy & Peaceful', emoji: '😊' },
+  { id: 'missing_appa', label: 'Missing Appa Badly', emoji: '💔' },
+  { id: 'feeling_low', label: 'Feeling Low / Emotional', emoji: '🥺' },
+  { id: 'stressed', label: 'Stressed / Overwhelmed', emoji: '😫' },
+  { id: 'love_appa', label: 'Love You Appa ❤️', emoji: '💖' },
+];
+
+export default function ConfidentialForm({ currentMood: propMood = '' }) {
   const [formData, setFormData] = useState({
-    q1_feeling: '',
-    q2_miss_memory: '',
-    q3_message_to_appa: '',
+    feeling: '',
+    memory: '',
+    messageToAppa: '',
   });
 
+  const [currentMood, setCurrentMood] = useState(propMood);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -20,11 +29,15 @@ export default function ConfidentialForm() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleSelectMood = (label) => {
+    setCurrentMood((prev) => (prev === label ? '' : label));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage('');
 
-    if (!formData.q1_feeling.trim() || !formData.q2_miss_memory.trim() || !formData.q3_message_to_appa.trim()) {
+    if (!formData.feeling.trim() || !formData.memory.trim() || !formData.messageToAppa.trim()) {
       setErrorMessage('Please answer all 3 questions so Appa can hear your full heart.');
       return;
     }
@@ -33,49 +46,59 @@ export default function ConfidentialForm() {
 
     try {
       const payload = {
-        daughterName: 'Jaganya J (Jany)',
-        q1_feeling: formData.q1_feeling,
-        q2_miss_memory: formData.q2_miss_memory,
-        q3_message_to_appa: formData.q3_message_to_appa,
+        data: [
+          {
+            timestamp: new Date().toLocaleString(),
+            feeling: formData.feeling.trim(),
+            memory: formData.memory.trim(),
+            messageToAppa: formData.messageToAppa.trim(),
+            mood: currentMood || "General Note"
+          }
+        ]
       };
 
-      console.log('Posting confidential message to:', `${API_BASE}/api/messages`, payload);
+      console.log('Sending confidential message directly to SheetDB:', payload);
 
-      const response = await fetch(`${API_BASE}/api/messages`, {
+      const response = await fetch(SHEETDB_API_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify(payload),
       });
 
       const result = await response.json();
 
-      if (response.ok && result.success) {
-        console.log('✅ Server accepted message successfully:', result);
-        alert('Un message Appa kitta safe-a poi serndhuduchu da chellam! ❤️');
+      if (response.ok && (result.created || result.status === 200 || result.status === 201 || result.data)) {
+        console.log('✅ SheetDB accepted response successfully:', result);
         setIsSuccess(true);
         setFormData({
-          q1_feeling: '',
-          q2_miss_memory: '',
-          q3_message_to_appa: '',
+          feeling: '',
+          memory: '',
+          messageToAppa: '',
         });
+        setCurrentMood('');
 
         // Trigger celebratory confetti burst
-        confetti({
-          particleCount: 60,
-          spread: 70,
-          origin: { y: 0.6 },
-          colors: ['#f43f5e', '#ec4899', '#f59e0b', '#10b981'],
-        });
+        try {
+          confetti({
+            particleCount: 60,
+            spread: 70,
+            origin: { y: 0.6 },
+            colors: ['#f43f5e', '#ec4899', '#f59e0b', '#10b981'],
+          });
+        } catch (e) {
+          // ignore if canvas not supported
+        }
       } else {
-        const errorMsg = result.message || 'Failed to send your message. Please try again.';
-        console.error('❌ Server error response:', response.status, result);
-        alert(`Server error (${response.status}): ${errorMsg}`);
+        const errorMsg = result?.message || result?.error || 'Failed to send your message to SheetDB. Please try again.';
+        console.error('❌ SheetDB error response:', response.status, result);
         setErrorMessage(errorMsg);
       }
     } catch (err) {
-      console.error('❌ Network error submitting to server:', err);
-      alert(`Network error connecting to server: ${err.message}`);
-      setErrorMessage(`Network error: ${err.message}`);
+      console.error('❌ Network error submitting to SheetDB:', err);
+      setErrorMessage(`Network error connecting to Google Sheets: ${err.message}`);
     } finally {
       setIsSubmitting(false);
     }
@@ -99,7 +122,7 @@ export default function ConfidentialForm() {
           </h2>
 
           <p className="text-slate-400 text-xs sm:text-sm">
-            Whatever you write here goes directly and solely to your father. No eyes other than Appa
+            Whatever you write here goes directly and solely to your father's vault. No eyes other than Appa
             will ever read this. Speak freely from your soul.
           </p>
         </div>
@@ -111,7 +134,7 @@ export default function ConfidentialForm() {
               <CheckCircle2 className="w-6 h-6 text-emerald-300" />
             </div>
             <h4 className="text-lg font-bold text-white font-serif mb-1">
-              Un messages Appa kitta safe-a poi serndhuduchu da chellam! ❤️
+              Un message Appa kitta safe-a poi serndhuduchu da chellam! ❤️
             </h4>
             <p className="text-xs sm:text-sm text-slate-300">
               Appa has received every single word you wrote. Thank you for opening your heart to me.
@@ -135,10 +158,50 @@ export default function ConfidentialForm() {
 
         {/* Form Body */}
         <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Optional Mood Tag Selector */}
+          <div>
+            <label className="block text-xs font-semibold text-slate-300 mb-2 flex items-center gap-1.5">
+              <Smile className="w-3.5 h-3.5 text-rose-400" />
+              <span>Current Mood Tag (Optional):</span>
+              <span className="text-[11px] text-slate-500 font-normal">
+                {currentMood ? `Selected: "${currentMood}"` : '(Defaults to "General Note")'}
+              </span>
+            </label>
+            <div className="flex flex-wrap gap-2">
+              {QUICK_MOODS.map((item) => {
+                const isSelected = currentMood === item.label;
+                return (
+                  <button
+                    key={item.id}
+                    type="button"
+                    onClick={() => handleSelectMood(item.label)}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-medium flex items-center gap-1.5 transition-all border ${
+                      isSelected
+                        ? 'bg-rose-500 text-white border-rose-400 shadow-md shadow-rose-950/50 scale-105'
+                        : 'bg-white/5 hover:bg-white/10 text-slate-300 border-white/10'
+                    }`}
+                  >
+                    <span>{item.emoji}</span>
+                    <span>{item.label}</span>
+                  </button>
+                );
+              })}
+              {currentMood && (
+                <button
+                  type="button"
+                  onClick={() => setCurrentMood('')}
+                  className="px-2.5 py-1 text-[11px] text-slate-400 hover:text-slate-200 underline"
+                >
+                  Clear tag
+                </button>
+              )}
+            </div>
+          </div>
+
           {/* Question 1 */}
           <div>
             <label
-              htmlFor="q1_feeling"
+              htmlFor="feeling"
               className="block text-sm font-semibold text-slate-200 mb-2"
             >
               1. Ippo un manasu eppadi da irukku?{' '}
@@ -147,21 +210,22 @@ export default function ConfidentialForm() {
               </span>
             </label>
             <textarea
-              id="q1_feeling"
-              name="q1_feeling"
+              id="feeling"
+              name="feeling"
               rows={3}
               required
-              value={formData.q1_feeling}
+              disabled={isSubmitting}
+              value={formData.feeling}
               onChange={handleChange}
               placeholder="Tell Appa what is going on in your mind and heart..."
-              className="w-full px-4 py-3 rounded-2xl bg-slate-950/70 border border-white/10 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 text-sm transition-all"
+              className="w-full px-4 py-3 rounded-2xl bg-slate-950/70 border border-white/10 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 text-sm transition-all disabled:opacity-60"
             />
           </div>
 
           {/* Question 2 */}
           <div>
             <label
-              htmlFor="q2_miss_memory"
+              htmlFor="memory"
               className="block text-sm font-semibold text-slate-200 mb-2"
             >
               2. Namma serndhirundha memories-la unakku eppovum nyabagam vara vishayam enna?{' '}
@@ -170,21 +234,22 @@ export default function ConfidentialForm() {
               </span>
             </label>
             <textarea
-              id="q2_miss_memory"
-              name="q2_miss_memory"
+              id="memory"
+              name="memory"
               rows={3}
               required
-              value={formData.q2_miss_memory}
+              disabled={isSubmitting}
+              value={formData.memory}
               onChange={handleChange}
               placeholder="A walk, a laugh, a sweet meal, or a silly joke we shared..."
-              className="w-full px-4 py-3 rounded-2xl bg-slate-950/70 border border-white/10 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 text-sm transition-all"
+              className="w-full px-4 py-3 rounded-2xl bg-slate-950/70 border border-white/10 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 text-sm transition-all disabled:opacity-60"
             />
           </div>
 
           {/* Question 3 */}
           <div>
             <label
-              htmlFor="q3_message_to_appa"
+              htmlFor="messageToAppa"
               className="block text-sm font-semibold text-slate-200 mb-2"
             >
               3. Un appa-kitta neega eppovum sollama vechurundha, illa ippo solla virumbura oru
@@ -194,14 +259,15 @@ export default function ConfidentialForm() {
               </span>
             </label>
             <textarea
-              id="q3_message_to_appa"
-              name="q3_message_to_appa"
+              id="messageToAppa"
+              name="messageToAppa"
               rows={4}
               required
-              value={formData.q3_message_to_appa}
+              disabled={isSubmitting}
+              value={formData.messageToAppa}
               onChange={handleChange}
               placeholder="Whatever is in your heart, write it here with zero fear..."
-              className="w-full px-4 py-3 rounded-2xl bg-slate-950/70 border border-white/10 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 text-sm transition-all"
+              className="w-full px-4 py-3 rounded-2xl bg-slate-950/70 border border-white/10 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 text-sm transition-all disabled:opacity-60"
             />
           </div>
 
@@ -215,7 +281,7 @@ export default function ConfidentialForm() {
               {isSubmitting ? (
                 <>
                   <Loader2 className="w-5 h-5 animate-spin" />
-                  <span>Delivering to Appa...</span>
+                  <span>Delivering to Appa's Vault...</span>
                 </>
               ) : (
                 <>

@@ -8,7 +8,7 @@ import PromiseLetter from './components/PromiseLetter.jsx';
 import PolaroidGallery from './components/PolaroidGallery.jsx';
 import MoodTracker from './components/MoodTracker.jsx';
 import ConfidentialForm from './components/ConfidentialForm.jsx';
-import AppaPrivateDashboard from './components/AppaPrivateDashboard.jsx';
+import AppaPrivateView from './components/AppaPrivateView.jsx';
 import { Heart, Sparkles, Shield, Compass, Lock, KeyRound } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -61,7 +61,7 @@ export default function App() {
 
   // Hidden Route: Appa's Private Monitoring Desk
   if (currentPath === '/appa-private-view') {
-    return <AppaPrivateDashboard />;
+    return <AppaPrivateView />;
   }
 
   const VALID_PASSWORDS = ['jaganya2007'];
